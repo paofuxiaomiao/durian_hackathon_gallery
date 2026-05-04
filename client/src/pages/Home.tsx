@@ -7,13 +7,15 @@ import { PageLayout } from "@/components/PageLayout";
 import { ProjectCard } from "@/components/ProjectCard";
 import { CornerStamp, MonoTag, RuleLine } from "@/components/Editorial";
 import { eventStats, projects } from "@/data/projects";
-
-const HERO_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663340918340/994Dqg2b9RNMu3qNaC4GPY/hero-magazine-cover-WUL356MRGnhuaNK2Pg4oqv.webp";
-const CROSS_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663340918340/994Dqg2b9RNMu3qNaC4GPY/durian-cross-section-69zQJf9ogSZMpTwJ85iPym.webp";
-const SPIKE_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663340918340/994Dqg2b9RNMu3qNaC4GPY/durian-spike-pattern-RuZKMzaeCayMGSCkYfKP8T.webp";
+import { Partners } from "@/components/Partners";
+import {
+  heroImage as HERO_IMG,
+  crossSectionImage as CROSS_IMG,
+  spikePatternImage as SPIKE_IMG,
+  festivalPoster,
+  chuangyaMascot,
+  huaihuaFestivalMark,
+} from "@/data/assets";
 
 export default function Home() {
   const featured = projects[0];
@@ -164,8 +166,63 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* POSTER · 官方海报展板 */}
       <section className="container py-14 md:py-20">
+        <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+          <div className="md:col-span-7 order-2 md:order-1">
+            <MonoTag>Official Poster · 主办海报</MonoTag>
+            <h2
+              className="mt-3 text-3xl md:text-5xl leading-[1.05]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+            >
+              智能无界 <span style={{ color: "var(--spike)" }}>·</span> 榴莲有 AI<br />
+              <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 800 }}>
+                Huaihua × ASEAN × AI
+              </span>
+            </h2>
+            <p
+              className="mt-5 text-base md:text-lg leading-relaxed"
+              style={{ color: "var(--ink-soft)" }}
+            >
+              本届黑客松随<strong style={{ color: "var(--ink)" }}>2026 怀化市东盟集榴莲节</strong>同期举办，市场、选购、娱乐、社区与 AI 五路并进。在这本纸感刊物里，你不仅能看到 10 个作品，也能看到一场属于怀化的热带节日是怎么跟 AI 撞在一起的。
+            </p>
+            <div className="mt-7 grid grid-cols-3 gap-3 max-w-md">
+              <div className="border-l-2 pl-3" style={{ borderColor: "var(--spike)" }}>
+                <div className="mono-tag">Date</div>
+                <div className="mt-1" style={{ fontFamily: "var(--font-display)", fontWeight: 800 }}>5.1 — 5.4</div>
+              </div>
+              <div className="border-l-2 pl-3" style={{ borderColor: "var(--spike)" }}>
+                <div className="mono-tag">City</div>
+                <div className="mt-1" style={{ fontFamily: "var(--font-display)", fontWeight: 800 }}>湖南 · 怀化</div>
+              </div>
+              <div className="border-l-2 pl-3" style={{ borderColor: "var(--spike)" }}>
+                <div className="mono-tag">Theme</div>
+                <div className="mt-1" style={{ fontFamily: "var(--font-display)", fontWeight: 800 }}>脑洞大开</div>
+              </div>
+            </div>
+          </div>
+          <div className="md:col-span-5 order-1 md:order-2 relative">
+            <div
+              className="absolute -top-3 -left-3 z-10 hidden md:flex items-center gap-1.5 px-3 py-1 mono-tag"
+              style={{ background: "var(--spike)", color: "var(--paper)" }}
+            >
+              SPECIAL POSTER
+            </div>
+            <div className="relative border-[1.5px] overflow-hidden" style={{ borderColor: "var(--ink)" }}>
+              <img
+                src={festivalPoster}
+                alt="怀化东盟 AI 榴莲节官方海报"
+                className="block w-full h-auto"
+                loading="lazy"
+              />
+            </div>
+            <div className="mt-2 mono-tag text-right">Fig.02 · © 2026 怀化东盟集榴莲节 / AI 极客松 · 创芽 OPC</div>
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="container pb-14 md:pb-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
           {[
             { k: "参赛队伍", v: eventStats.totalTeams, sub: "Teams" },
@@ -311,12 +368,20 @@ export default function Home() {
           className="relative grid md:grid-cols-12 gap-6 items-center border-2 p-8 md:p-14"
           style={{ borderColor: "var(--ink)", background: "var(--card)" }}
         >
-          <img
-            src={CROSS_IMG}
-            alt="榴莲剖面手绘"
-            className="md:col-span-4 w-full max-w-[280px] mx-auto"
-            loading="lazy"
-          />
+          <div className="md:col-span-4 relative">
+            <img
+              src={CROSS_IMG}
+              alt="榴莲剖面手绘"
+              className="w-full max-w-[260px] mx-auto"
+              loading="lazy"
+            />
+            <img
+              src={chuangyaMascot}
+              alt="创芽仓鼠君吉祥物"
+              className="absolute -right-2 -bottom-2 w-24 h-24 object-contain drop-shadow-md"
+              loading="lazy"
+            />
+          </div>
           <div className="md:col-span-8">
             <MonoTag>Editor's Note · 刊首语</MonoTag>
             <h3
@@ -342,6 +407,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* PARTNERS */}
+      <Partners />
     </PageLayout>
   );
 }

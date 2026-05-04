@@ -6,9 +6,14 @@ import { ArrowUpRight } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
 import { MonoTag, RuleLine } from "@/components/Editorial";
 import { eventStats, projects } from "@/data/projects";
-
-const CROSS_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663340918340/994Dqg2b9RNMu3qNaC4GPY/durian-cross-section-69zQJf9ogSZMpTwJ85iPym.webp";
+import { Partners } from "@/components/Partners";
+import {
+  crossSectionImage as CROSS_IMG,
+  festivalPoster,
+  chuangyaMascot,
+  chuangyaOpcLogo,
+  huaihuaFestivalMark,
+} from "@/data/assets";
 
 export default function About() {
   const tools = Array.from(new Set(projects.flatMap((p) => p.tools)));
@@ -50,19 +55,29 @@ export default function About() {
               </div>
             </div>
           </div>
-          <div className="md:col-span-5 md:sticky md:top-10">
+          <div className="md:col-span-5 space-y-6 md:sticky md:top-10">
             <div className="relative border-2 p-6" style={{ borderColor: "var(--ink)", background: "var(--card)" }}>
               <img src={CROSS_IMG} alt="榴莲剖面图" className="w-full" loading="lazy" />
               <div className="mt-4 mono-tag text-center">Fig.01 · 榴莲剖面 / Cross-section</div>
               <p className="mt-4 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
-                一颗成熟的榴莲,壳是密钉、瓤是烈香、肉是奶油。AI 也有它的壳与瓤——这本刊的工作就是把它一房一房地剖开。
+                一颗成熟的榴莲，壳是密钉、瓤是烈香、肉是奶油。AI 也有它的壳与瓤——这本刊的工作就是把它一房一房地剖开。
               </p>
+            </div>
+            <div className="relative border-2 overflow-hidden" style={{ borderColor: "var(--ink)", background: "var(--card)" }}>
+              <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "var(--border)" }}>
+                <span className="mono-tag">Official Poster</span>
+                <span className="mono-tag">2026.05.01 — 05.04</span>
+              </div>
+              <img src={festivalPoster} alt="怀化东盟 AI 榴莲节海报" className="block w-full h-auto" loading="lazy" />
             </div>
           </div>
         </div>
       </section>
 
       <RuleLine className="container my-12" />
+
+      {/* PARTNERS */}
+      <Partners />
 
       {/* 杂志规格 */}
       <section className="container">

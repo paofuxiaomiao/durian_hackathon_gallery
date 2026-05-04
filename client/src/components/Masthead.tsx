@@ -3,6 +3,7 @@
 
 import { Link, useLocation } from "wouter";
 import { RuleLine } from "./Editorial";
+import { huaihuaFestivalMark } from "@/data/assets";
 
 export function Masthead() {
   const [location] = useLocation();
@@ -27,8 +28,15 @@ export function Masthead() {
             </span>
             <span className="hidden sm:inline mono-tag">AI · DURIAN · HACKATHON</span>
           </Link>
-          <div className="hidden md:block mono-tag">
-            VOL. 01 · ISSUE 01 · 怀化 · 2026 SPRING
+          <div className="hidden md:flex items-center gap-3">
+            <span className="mono-tag">VOL. 01 · ISSUE 01 · 2026 SPRING</span>
+            <span className="h-7 w-px" style={{ background: "var(--ink)", opacity: 0.4 }} />
+            <img
+              src={huaihuaFestivalMark}
+              alt="2026 怀化东盟集榴莲节"
+              className="h-7 w-auto object-contain"
+              loading="eager"
+            />
           </div>
         </div>
         <div className="mt-4">
