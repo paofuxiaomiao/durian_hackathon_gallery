@@ -83,6 +83,19 @@ export default function Home() {
                 <Quote className="w-5 h-5" />
                 参赛者的感想
               </Link>
+              <Link
+                href="/field-notes"
+                className="group inline-flex items-center gap-2 px-5 py-3 transition-colors"
+                style={{
+                  background: "transparent",
+                  color: "var(--ink)",
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  borderBottom: "2px solid var(--spike)",
+                }}
+              >
+                · 现场片段 Field Notes →
+              </Link>
             </div>
           </div>
 

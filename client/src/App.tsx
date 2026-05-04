@@ -11,6 +11,7 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Voices from "./pages/Voices";
 import About from "./pages/About";
+import FieldNotes from "./pages/FieldNotes";
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -27,6 +28,7 @@ function Router() {
       <Route path="/projects" component={Projects} />
       <Route path="/projects/:id" component={ProjectDetail} />
       <Route path="/voices" component={Voices} />
+      <Route path="/field-notes" component={FieldNotes} />
       <Route path="/about" component={About} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
