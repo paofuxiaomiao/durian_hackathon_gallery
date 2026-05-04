@@ -14,6 +14,7 @@ import {
   SectionLabel,
 } from "@/components/Editorial";
 import { fieldNotes, type FieldNote, type FieldNoteKind } from "@/data/fieldNotes";
+import { FieldQuotesMarquee } from "@/components/FieldQuotesMarquee";
 
 type Filter = "all" | FieldNoteKind;
 
@@ -101,6 +102,9 @@ export default function FieldNotes() {
           <RuleLine />
         </div>
       </section>
+
+      {/* ---------------- Quotes Marquee ---------------- */}
+      <FieldQuotesMarquee className="mt-10" />
 
       {/* ---------------- Collage Wall ---------------- */}
       <section className="container mt-12 md:mt-16">

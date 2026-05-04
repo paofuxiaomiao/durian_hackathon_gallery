@@ -8,6 +8,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { CornerStamp, MonoTag, RuleLine } from "@/components/Editorial";
 import { eventStats, projects } from "@/data/projects";
 import { Partners } from "@/components/Partners";
+import { FieldQuotesMarquee } from "@/components/FieldQuotesMarquee";
 import {
   heroImage as HERO_IMG,
   crossSectionImage as CROSS_IMG,
@@ -373,6 +374,30 @@ export default function Home() {
             <ProjectCard key={p.id} project={p} />
           ))}
         </div>
+      </section>
+
+      {/* FIELD NOTES TEASER · 与现场片段模块之间的横幅 */}
+      <section className="mt-12 md:mt-20">
+        <div className="container mb-4">
+          <div className="flex items-end justify-between gap-6 flex-wrap">
+            <div>
+              <MonoTag>Photo Essay · NO.05</MonoTag>
+              <h3
+                className="mt-2 text-2xl md:text-4xl leading-tight"
+                style={{ fontFamily: "var(--font-display)", fontWeight: 800 }}
+              >
+                一样是黑客松<span style={{ color: "var(--spike)" }}>,</span>这里不讲代码<span style={{ color: "var(--spike)" }}>,</span>只讲现场。
+              </h3>
+            </div>
+            <Link
+              href="/field-notes"
+              className="mono-tag inline-flex items-center gap-1 hover:opacity-70 transition"
+            >
+              进入现场片段 →
+            </Link>
+          </div>
+        </div>
+        <FieldQuotesMarquee />
       </section>
 
       {/* CALL TO READ */}
