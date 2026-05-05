@@ -108,7 +108,7 @@ export default function Home() {
           <div className="col-span-12 md:col-span-5 relative">
             <div className="relative">
               <div
-                className="absolute -top-4 -left-4 hidden md:flex items-center justify-center w-28 h-28 rounded-full text-center"
+                className="absolute -top-4 -left-4 z-20 pointer-events-none hidden md:flex items-center justify-center w-28 h-28 rounded-full text-center"
                 style={{
                   background: "var(--paper)",
                   border: "1.5px solid var(--spike)",
