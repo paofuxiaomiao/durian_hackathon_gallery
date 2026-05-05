@@ -13,7 +13,8 @@ import Voices from "./pages/Voices";
 import About from "./pages/About";
 import FieldNotes from "./pages/FieldNotes";
 
-const BASE = import.meta.env.BASE_URL || "/";
+const rawBase = import.meta.env.BASE_URL || "/";
+const BASE = rawBase === "/" ? "/" : rawBase.replace(/\/$/, "");
 
 function ScrollToTop() {
   const [location] = useLocation();
