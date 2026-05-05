@@ -40,7 +40,7 @@ export default function About() {
               style={{ color: "var(--ink)", fontFamily: "var(--font-sans)" }}
             >
               <p className="first-letter:font-bold first-letter:text-6xl first-letter:mr-1 first-letter:float-left first-letter:leading-[0.85]">
-                这是一本写给参与者的纸感刊物。我们把全国首个 AI × 榴莲线上黑客松的{eventStats.totalTeams} 支队伍,逐一编进 NO.01–NO.10 的目录里。每一篇都是一次完整的杂志专题:封面照、引文、项目介绍、参赛感想、vibe coding 心得,以及一个可以马上点开就玩的在线 Demo。
+                这是一本写给参与者的纸感刊物。我们把全国首个 AI × 榴莲线上黑客松的{eventStats.totalTeams} 支队伍,逐一编进 NO.01–NO.11 的目录里。每一篇都是一次完整的杂志专题:封面照、引文、项目介绍、参赛感想、vibe coding 心得,以及一个可以马上点开就玩的在线 Demo。
               </p>
               <p className="mt-6">
                 我们刻意避开了"科技产品宣传册"的写法。不堆砌技术名词,不喊口号,而是让每位参赛者用自己的语言把热度、卡顿、上头、迷失都说出来——因为这才是 vibe coding 的真实样子,也是这场比赛最值得被记下的地方。

@@ -105,7 +105,7 @@ export function Footer() {
               榴莲特别号 · AI Durian Hackathon
             </div>
             <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
-              一本属于全国首个 AI × 榴莲线上黑客松的纸感刊物,记录 10 支队伍如何用 AI 把榴莲产业链做得有趣又上头。
+              一本属于全国首个 AI × 榴莲线上黑客松的纸感刊物,记录 11 支队伍如何用 AI 把榴莲产业链做得有趣又上头。
             </p>
           </div>
           <div>

@@ -45,7 +45,7 @@ export default function Projects() {
             </h1>
           </div>
           <p className="md:col-span-5 text-base md:text-lg leading-relaxed" style={{ color: "var(--ink-soft)" }}>
-            10 篇报道,从 NO.01 到 NO.10。点选一张封面卡,即可翻到该作品的杂志跨页:项目介绍、参赛感想、vibe coding 心得,以及一键直达在线 Demo。
+            11 篇报道,从 NO.01 到 NO.11。点选一张封面卡,即可翻到该作品的杂志跨页:项目介绍、参赛感想、vibe coding 心得,以及一键直达在线 Demo。
           </p>
         </div>
 

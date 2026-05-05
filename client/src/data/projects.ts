@@ -4,7 +4,7 @@
 
 export interface Project {
   id: string;
-  issueNo: string; // NO.01 ~ NO.10
+  issueNo: string; // NO.01 ~ NO.11
   teamName: string;
   projectTitle: string; // 网站展示用的项目名(从项目介绍中提炼)
   tagline: string; // 一句话副标题
@@ -260,11 +260,32 @@ export const projects: Project[] = [
     category: "对话式商业",
     hue: 5,
   },
+  {
+    id: "durian-self-intro",
+    issueNo: "NO.11",
+    teamName: "榴榴又莲莲",
+    projectTitle: "榴莲：一封来自热带的自我介绍信",
+    tagline: "面向榴莲文化节的互动式科普介绍页，以榴莲的第一人称口吻讲述跨越六千万年的传奇故事",
+    leader: "小能猫",
+    members: "无(单人参赛)",
+    affiliation: "个人参赛 / 北京市朝阳区",
+    completionDate: "2026-05-05",
+    tools: ["Claude Code", "DeepSeek V4", "豆包"],
+    projectUrls: [],
+    description:
+      `"榴莲：一封来自热带的自我介绍信"是一个面向榴莲文化节的互动式科普介绍页，以榴莲的第一人称口吻，讲述这颗"热带水果之王"跨越六千万年的传奇故事。项目以单页滚动叙事为载体，将植物学知识与视觉设计深度融合，让观众从"看到榴莲"升级为"看懂榴莲"。页面内容涵盖榴莲从马来群岛起源、大航海时代的跨洲传播，到现代嫁接种植技术，以及中国海南打破"种不了榴莲"魔咒的产业突破。\n\n核心功能：\n1. 滚动叙事结构——五大章节层层递进（六千万年旅程→古籍印象→成长史→中国新篇章→趣味百科）\n2. 多媒体融合——6张AI主题插画+5段循环动画视频，图文动三位一体\n3. 种植五步动态卡片——育苗/定植/田间管理/授粉/采收，滚动触发动效播放\n4. 实时视觉调节面板——右下角Tweeks面板可调色相、饱和度、动效速度、字体大小\n5. 交互动效系统——缓流渐变背景、滚动触发渐显、数字计数动画、粒子漂浮，纯CSS实现零依赖\n6. 响应式适配——桌面/平板/手机全断点覆盖，适配大屏展陈与移动端浏览`,
+    vibeCoding:
+      "这次黑客松让我深刻体会到'内容驱动的设计'和'AI 辅助创作'的结合力量。起初直接使用Claude的效果非常差——充斥AI味的网页设计、糟糕的蓝紫色渐变……我在网上找到了专门用于网页设计的skill，调成了如今的黄绿色渐变设计。DeepSeek V4的加入极大的节省了开发成本，整个页面只花费了7毛钱！豆包的免费图片以及视频生成也十分便利，现在的'一人开发'真的不是梦想了。",
+    feeling: "",
+    accent: "gold",
+    category: "互动科普 · 叙事网页",
+    hue: 62,
+  },
 ];
 
 export const eventStats = {
   totalTeams: projects.length,
-  totalMembers: 26,
+  totalMembers: 27,
   liveProjects: projects.filter((p) => p.projectUrls.length > 0).length,
   toolCount: Array.from(new Set(projects.flatMap((p) => p.tools))).length,
 };

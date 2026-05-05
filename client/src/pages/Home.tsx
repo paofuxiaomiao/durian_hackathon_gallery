@@ -200,7 +200,7 @@ export default function Home() {
               className="mt-5 text-base md:text-lg leading-relaxed"
               style={{ color: "var(--ink-soft)" }}
             >
-              本届黑客松随<strong style={{ color: "var(--ink)" }}>2026 怀化市东盟集榴莲节</strong>同期举办，市场、选购、娱乐、社区与 AI 五路并进。在这本纸感刊物里，你不仅能看到 10 个作品，也能看到一场属于怀化的热带节日是怎么跟 AI 撞在一起的。
+              本届黑客松随<strong style={{ color: "var(--ink)" }}>2026 怀化市东盟集榴莲节</strong>同期举办，市场、选购、娱乐、社区与 AI 五路并进。在这本纸感刊物里，你不仅能看到 11 个作品，也能看到一场属于怀化的热带节日是怎么跟 AI 撞在一起的。
             </p>
             <div className="mt-7 grid grid-cols-3 gap-3 max-w-md">
               <div className="border-l-2 pl-3" style={{ borderColor: "var(--spike)" }}>
@@ -368,7 +368,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="md:col-span-5 text-base leading-relaxed" style={{ color: "var(--ink-soft)" }}>
-            从市场情报、影像识别,到多人在线卡牌、人格化导购——10 个作品像一颗颗榴莲,壳一样硬核,肉一样上头。
+            从市场情报、影像识别,到多人在线卡牌、人格化导购——11 个作品像一颗颗榴莲,壳一样硬核,肉一样上头。
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
