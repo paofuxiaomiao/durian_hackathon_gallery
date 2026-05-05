@@ -18,6 +18,8 @@ import {
   huaihuaFestivalMark,
 } from "@/data/assets";
 
+const CONTENT_VERSION = "durian-camera-title-fix-20260506";
+
 export default function Home() {
   const featured = projects[0];
   // 三组精选：NO.03 赵巍老师战队、NO.04 榴莲大王、NO.09 王先森爱榴莲
@@ -28,7 +30,7 @@ export default function Home() {
   return (
     <PageLayout>
       {/* HERO · 封面跨页 */}
-      <section className="container relative pt-6 md:pt-10">
+      <section className="container relative pt-6 md:pt-10" data-content-version={CONTENT_VERSION}>
         <div className="grid grid-cols-12 gap-y-6 md:gap-x-8">
           <div className="col-span-12 md:col-span-7 relative">
             <div className="flex items-center gap-3">
