@@ -10,34 +10,50 @@ type GroveMessage = {
   createdAt: string;
 };
 
+type SpecimenObject = {
+  id: string;
+  ariaLabel: string;
+  fragment: string;
+  whisper: string;
+  shape: "leaf" | "spike" | "tag";
+  restClassName: string;
+  placedClassName: string;
+  slotClassName: string;
+};
+
 const UNLOCK_KEY = "durian.secretGrove.unlocked";
 const MESSAGES_KEY = "durian.secretGrove.messages";
-const ANSWERS = ["榴莲有ai", "榴莲有AI", "榴莲有 ai", "榴莲有 AI", "durian ai", "ai durian"];
 
-const specimenCards = [
+const specimenObjects: SpecimenObject[] = [
   {
-    id: "root",
-    no: "01",
-    title: "根 · Root",
-    prompt: "把第一枚印章放在泥土里读。",
-    clue: "榴莲",
-    note: "树根记住入口,也记住这本刊物的主角。",
+    id: "leaf",
+    ariaLabel: "拾起一片带有榴莲气味的叶片",
+    fragment: "榴莲",
+    whisper: "叶脉覆住了第一道淡痕。",
+    shape: "leaf",
+    restClassName: "left-3 top-14 rotate-[-12deg] md:left-8 md:top-20",
+    placedClassName: "left-[27%] top-[29%] rotate-[-4deg] scale-90",
+    slotClassName: "left-[24%] top-[28%] h-24 w-28 rotate-[-5deg] rounded-[52%_48%_48%_52%/62%_45%_55%_38%]",
   },
   {
-    id: "canopy",
-    no: "02",
-    title: "冠 · Canopy",
-    prompt: "把第二枚印章放到树冠的阴影里读。",
-    clue: "有",
-    note: "线索不是名词,而是一个正在发生的连接。",
+    id: "thorn",
+    ariaLabel: "拾起一枚从果壳落下的果刺",
+    fragment: "有",
+    whisper: "尖刺压住了纸里极细的一横。",
+    shape: "spike",
+    restClassName: "right-3 top-36 rotate-[14deg] md:right-9 md:top-40",
+    placedClassName: "left-[45%] top-[45%] rotate-[6deg] scale-90",
+    slotClassName: "left-[43%] top-[44%] h-20 w-24 rotate-[6deg] rounded-full",
   },
   {
-    id: "seed",
-    no: "03",
-    title: "核 · Seed",
-    prompt: "把第三枚印章藏进果核,它会发出一点电子光。",
-    clue: "AI",
-    note: "最后的答案用两个英文字母收束,像 demo 跑通时亮起的光标。",
+    id: "tag",
+    ariaLabel: "拾起一张写着机读符号的纸签",
+    fragment: "AI",
+    whisper: "纸签把最后一处空白照亮。",
+    shape: "tag",
+    restClassName: "bottom-8 left-12 rotate-[6deg] md:left-20 md:bottom-10",
+    placedClassName: "left-[59%] top-[60%] rotate-[2deg] scale-90",
+    slotClassName: "left-[58%] top-[59%] h-16 w-28 rotate-[2deg] rounded-sm",
   },
 ];
 
@@ -51,14 +67,10 @@ const initialMessages: GroveMessage[] = [
   {
     id: "seed-message-2",
     name: "一颗会发光的果核",
-    body: "如果你看见这块板,说明你已经把三枚线索拼成一句话。请把你的祝福、吐槽、下一版 demo 愿望留在这里。",
+    body: "如果你看见这块板,说明你已经在旧标本纸上看见那句很小的暗语。请把你的祝福、吐槽、下一版 demo 愿望留在这里。",
     createdAt: "2026-05-06T00:01:00.000Z",
   },
 ];
-
-function normalizeAnswer(value: string) {
-  return value.trim().replace(/\s+/g, " ").toLowerCase();
-}
 
 function createId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -93,15 +105,70 @@ function formatTime(value: string) {
   }
 }
 
+function classNames(...values: Array<string | false | null | undefined>) {
+  return values.filter(Boolean).join(" ");
+}
+
+function SpecimenShape({ piece, placed }: { piece: SpecimenObject; placed: boolean }) {
+  if (piece.shape === "leaf") {
+    return (
+      <span
+        className="relative block h-24 w-28 rounded-[52%_48%_48%_52%/62%_45%_55%_38%] border-[1.5px]"
+        style={{
+          borderColor: placed ? "var(--spike)" : "var(--ink)",
+          background: placed
+            ? "linear-gradient(135deg, color-mix(in oklab, var(--spike) 28%, var(--paper)) 0%, color-mix(in oklab, var(--flesh) 24%, var(--paper)) 100%)"
+            : "linear-gradient(135deg, color-mix(in oklab, var(--paper) 84%, white) 0%, color-mix(in oklab, var(--spike) 12%, var(--paper)) 100%)",
+          boxShadow: placed ? "0 12px 28px color-mix(in oklab, var(--spike) 16%, transparent)" : "6px 7px 0 color-mix(in oklab, var(--ink) 10%, transparent)",
+        }}
+      >
+        <span className="absolute left-1/2 top-2 h-20 w-px -translate-x-1/2 rotate-[18deg]" style={{ background: "color-mix(in oklab, var(--ink) 34%, transparent)" }} />
+        <span className="absolute left-9 top-9 h-px w-12 rotate-[24deg]" style={{ background: "color-mix(in oklab, var(--ink) 20%, transparent)" }} />
+      </span>
+    );
+  }
+
+  if (piece.shape === "spike") {
+    return (
+      <span className="relative grid h-24 w-24 place-items-center">
+        <span
+          className="absolute h-16 w-16 rotate-45 border-[1.5px]"
+          style={{
+            borderColor: placed ? "var(--spike)" : "var(--ink)",
+            background: placed ? "color-mix(in oklab, var(--spike) 18%, var(--paper))" : "color-mix(in oklab, var(--paper) 82%, white)",
+            boxShadow: placed ? "0 10px 22px color-mix(in oklab, var(--spike) 18%, transparent)" : "5px 5px 0 color-mix(in oklab, var(--ink) 10%, transparent)",
+          }}
+        />
+        <span className="absolute h-5 w-5 rounded-full border" style={{ borderColor: "color-mix(in oklab, var(--ink) 46%, transparent)", background: "var(--paper)" }} />
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className="relative block h-16 w-28 border-[1.5px] px-3 py-2 text-left font-mono text-[0.62rem] uppercase tracking-[0.18em]"
+      style={{
+        borderColor: placed ? "var(--spike)" : "var(--ink)",
+        color: "var(--ink-soft)",
+        background: placed ? "color-mix(in oklab, var(--flesh) 22%, var(--paper))" : "color-mix(in oklab, var(--paper) 88%, white)",
+        boxShadow: placed ? "0 10px 22px color-mix(in oklab, var(--spike) 14%, transparent)" : "5px 6px 0 color-mix(in oklab, var(--ink) 9%, transparent)",
+      }}
+    >
+      botanical
+      <span className="mt-2 block h-px w-full" style={{ background: "color-mix(in oklab, var(--ink) 24%, transparent)" }} />
+      <span className="mt-2 block h-px w-2/3" style={{ background: "color-mix(in oklab, var(--ink) 18%, transparent)" }} />
+    </span>
+  );
+}
+
 function SecretGrove() {
-  const [openedCards, setOpenedCards] = useState<string[]>([]);
-  const [answer, setAnswer] = useState("");
-  const [error, setError] = useState("");
+  const [placedPieces, setPlacedPieces] = useState<string[]>([]);
   const [unlocked, setUnlocked] = useState(false);
   const [messages, setMessages] = useState<GroveMessage[]>(initialMessages);
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
   const [posted, setPosted] = useState(false);
+  const [lastWhisper, setLastWhisper] = useState("纸页很安静。几件东西散在边上。");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -114,30 +181,20 @@ function SecretGrove() {
     window.localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
   }, [messages]);
 
-  const cluePhrase = useMemo(() => {
-    return specimenCards
-      .filter((card) => openedCards.includes(card.id))
-      .map((card) => card.clue)
-      .join(" · ");
-  }, [openedCards]);
+  const allPlaced = placedPieces.length === specimenObjects.length;
 
-  const progress = Math.round((openedCards.length / specimenCards.length) * 100);
+  const arrangedPhrase = useMemo(() => {
+    return specimenObjects.map((piece) => (placedPieces.includes(piece.id) ? piece.fragment : "")).join("");
+  }, [placedPieces]);
 
-  function toggleCard(id: string) {
-    setOpenedCards((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
-    setError("");
+  function placePiece(piece: SpecimenObject) {
+    if (placedPieces.includes(piece.id)) return;
+    setPlacedPieces((current) => [...current, piece.id]);
+    setLastWhisper(piece.whisper);
   }
 
-  function submitAnswer(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const normalized = normalizeAnswer(answer);
-    const matched = ANSWERS.some((item) => normalizeAnswer(item) === normalized);
-    if (!matched) {
-      setError("果核还没有亮。提示:按 01 → 02 → 03 的顺序,把三枚印章读成一句话。");
-      return;
-    }
+  function openGate() {
     setUnlocked(true);
-    setError("");
     if (typeof window !== "undefined") {
       window.localStorage.setItem(UNLOCK_KEY, "true");
     }
@@ -175,27 +232,28 @@ function SecretGrove() {
       <section className="relative overflow-hidden border-y-[1.5px]" style={{ borderColor: "var(--ink)" }}>
         <div className="absolute inset-0 grain opacity-60" aria-hidden />
         <div className="absolute -right-14 -top-16 hidden h-72 w-72 rounded-full md:block" style={{ border: "1px solid color-mix(in oklab, var(--spike) 36%, transparent)" }} />
-        <div className="container relative grid min-h-[68vh] grid-cols-1 gap-10 py-14 md:grid-cols-[1.05fr_0.95fr] md:items-center md:py-20">
+        <div className="container relative grid min-h-[68vh] grid-cols-1 gap-10 py-14 md:grid-cols-[0.92fr_1.08fr] md:items-center md:py-20">
           <div>
-            <MonoTag>Secret Grove · Easter Egg</MonoTag>
+            <MonoTag>Secret Grove · Observation Room</MonoTag>
             <h1 className="mt-5 max-w-3xl text-5xl leading-none md:text-7xl" style={{ color: "var(--ink)" }}>
               隐藏果园
               <span className="block italic" style={{ fontFamily: "var(--font-serif)", color: "var(--spike)" }}>
-                Her Trees Mode
+                Herbarium Table
               </span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 md:text-lg" style={{ color: "var(--ink-soft)" }}>
-              这是夹在《榴莲特别号》纸页里的一个小关卡。它借用安静观察、逐层翻找线索的解谜气质,但谜面完全属于这场 AI 榴莲黑客松。请打开三枚标本印章,按编号读出一句话,果园门就会打开。
+              这不是一张试卷,也没有需要输入的答案。旧标本纸躺在桌面中央,几件掉落的东西在边缘等着被看见。让它们回到纸上,果园门会自己露出一道缝。
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="#puzzle" className="inline-flex items-center border px-5 py-3 text-sm font-bold transition hover:-translate-y-0.5" style={{ borderColor: "var(--ink)", background: "var(--ink)", color: "var(--paper)" }}>
-                开始解谜 →
+                走近桌面 →
               </a>
               <Link href="/" className="inline-flex items-center border px-5 py-3 text-sm font-bold transition hover:-translate-y-0.5" style={{ borderColor: "var(--ink)", color: "var(--ink)" }}>
                 返回封面
               </Link>
             </div>
           </div>
+
           <div className="relative mx-auto aspect-[4/5] w-full max-w-md border-[1.5px] p-5" style={{ borderColor: "var(--ink)", background: "color-mix(in oklab, var(--paper) 72%, white)" }}>
             <CornerStamp className="absolute -left-5 top-8 z-10 opacity-75" />
             <div className="flex h-full flex-col justify-between border p-6" style={{ borderColor: "color-mix(in oklab, var(--ink) 38%, transparent)" }}>
@@ -207,10 +265,10 @@ function SecretGrove() {
               </div>
               <div>
                 <p className="font-mono text-xs uppercase tracking-[0.24em]" style={{ color: "var(--ink-soft)" }}>
-                  tree says:
+                  from the margin:
                 </p>
                 <p className="mt-3 text-3xl leading-tight" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
-                  “先看根,再看冠,最后看果核。”
+                  “别急着读。先让纸面安静下来。”
                 </p>
               </div>
             </div>
@@ -219,82 +277,114 @@ function SecretGrove() {
       </section>
 
       <section id="puzzle" className="container py-16 md:py-24">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
           <div>
-            <SectionLabel kicker="Puzzle level" title="三枚标本印章" />
+            <SectionLabel kicker="Puzzle level" title="旧标本桌面" />
             <p className="mt-5 leading-8" style={{ color: "var(--ink-soft)" }}>
-              点开每张标本卡片,收集被树影挡住的词。你不需要外部资料,也不需要猜谜典故;只要按编号把词连起来,就能打开留言板。
+              桌面上没有编号,也没有答题框。只要观察纸上的淡痕和周围的小物件,轻触你觉得该归位的东西。
             </p>
             <div className="mt-8 border p-5" style={{ borderColor: "var(--ink)", background: "color-mix(in oklab, var(--paper-deep) 66%, transparent)" }}>
-              <div className="flex items-center justify-between gap-4">
-                <MonoTag>Clue progress</MonoTag>
-                <span className="font-mono text-sm" style={{ color: "var(--spike)" }}>{progress}%</span>
-              </div>
-              <div className="mt-3 h-2 border" style={{ borderColor: "var(--ink)" }}>
-                <div className="h-full transition-all duration-500" style={{ width: `${progress}%`, background: "var(--spike)" }} />
-              </div>
-              <p className="mt-4 min-h-6 font-mono text-sm tracking-[0.14em]" style={{ color: "var(--ink)" }}>
-                {cluePhrase || "等待第一枚印章被翻开……"}
+              <MonoTag>Field note</MonoTag>
+              <p className="mt-4 min-h-12 text-sm leading-7" style={{ color: "var(--ink-soft)" }}>
+                {allPlaced ? "暗字在纸纤维里合拢,门缝变亮了。" : lastWhisper}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {specimenCards.map((card) => {
-              const opened = openedCards.includes(card.id);
+          <div className="relative min-h-[34rem] overflow-hidden border-[1.5px] p-4 md:min-h-[40rem] md:p-6" style={{ borderColor: "var(--ink)", background: "radial-gradient(circle at 30% 20%, color-mix(in oklab, var(--flesh) 22%, transparent), transparent 26%), color-mix(in oklab, var(--paper-deep) 72%, var(--paper))" }}>
+            <div className="absolute inset-0 grain opacity-50" aria-hidden />
+            <div
+              className="absolute left-1/2 top-1/2 h-[74%] w-[70%] -translate-x-1/2 -translate-y-1/2 rotate-[-1.5deg] border-[1.5px] p-5 transition duration-700 md:w-[64%]"
+              style={{
+                borderColor: allPlaced ? "var(--spike)" : "color-mix(in oklab, var(--ink) 72%, transparent)",
+                background: "linear-gradient(180deg, color-mix(in oklab, var(--paper) 88%, white), color-mix(in oklab, var(--paper-deep) 72%, var(--paper)))",
+                boxShadow: "14px 18px 0 color-mix(in oklab, var(--ink) 8%, transparent)",
+              }}
+            >
+              <div className="flex items-center justify-between gap-3">
+                <MonoTag>no. 404 / herbarium</MonoTag>
+                <span className="h-8 w-8 rounded-full border" style={{ borderColor: "color-mix(in oklab, var(--ink) 30%, transparent)" }} />
+              </div>
+
+              <div className="relative mt-10 h-[78%] border border-dashed" style={{ borderColor: "color-mix(in oklab, var(--ink) 28%, transparent)" }}>
+                <div className="absolute left-5 top-5 h-20 w-16 border-l border-t" style={{ borderColor: "color-mix(in oklab, var(--ink) 24%, transparent)" }} />
+                <div className="absolute bottom-5 right-5 h-20 w-16 border-b border-r" style={{ borderColor: "color-mix(in oklab, var(--ink) 24%, transparent)" }} />
+                {specimenObjects.map((piece) => {
+                  const placed = placedPieces.includes(piece.id);
+                  return (
+                    <div
+                      key={piece.id}
+                      className={classNames("absolute border border-dashed transition duration-500", piece.slotClassName)}
+                      style={{
+                        borderColor: placed ? "color-mix(in oklab, var(--spike) 52%, transparent)" : "color-mix(in oklab, var(--ink) 22%, transparent)",
+                        background: placed ? "color-mix(in oklab, var(--spike) 5%, transparent)" : "transparent",
+                      }}
+                      aria-hidden
+                    >
+                      <span
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none text-3xl transition duration-700"
+                        style={{
+                          color: placed ? "var(--spike)" : "transparent",
+                          opacity: placed ? 0.78 : 0,
+                          fontFamily: "var(--font-display)",
+                          textShadow: placed ? "0 0 16px color-mix(in oklab, var(--spike) 20%, transparent)" : "none",
+                        }}
+                      >
+                        {piece.fragment}
+                      </span>
+                    </div>
+                  );
+                })}
+
+                <div className="absolute inset-x-0 bottom-8 flex flex-col items-center px-6 text-center">
+                  <p
+                    className="text-4xl leading-none transition duration-700 md:text-5xl"
+                    style={{
+                      color: allPlaced ? "var(--ink)" : "transparent",
+                      fontFamily: "var(--font-display)",
+                      opacity: allPlaced ? 1 : 0,
+                      letterSpacing: allPlaced ? "0.02em" : "0.18em",
+                    }}
+                    aria-live="polite"
+                  >
+                    {arrangedPhrase || "榴莲有AI"}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={openGate}
+                    className={classNames(
+                      "mt-5 border px-5 py-2 text-sm font-bold transition duration-500 hover:-translate-y-0.5",
+                      allPlaced ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0",
+                    )}
+                    style={{ borderColor: "var(--ink)", background: "var(--ink)", color: "var(--paper)" }}
+                    aria-hidden={!allPlaced}
+                  >
+                    推开果园门
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {specimenObjects.map((piece) => {
+              const placed = placedPieces.includes(piece.id);
               return (
                 <button
-                  key={card.id}
+                  key={piece.id}
                   type="button"
-                  onClick={() => toggleCard(card.id)}
-                  className="group min-h-[23rem] border-[1.5px] p-5 text-left transition duration-300 hover:-translate-y-1"
-                  style={{
-                    borderColor: opened ? "var(--spike)" : "var(--ink)",
-                    background: opened ? "color-mix(in oklab, var(--flesh) 22%, var(--paper))" : "color-mix(in oklab, var(--paper) 88%, white)",
-                    boxShadow: opened ? "8px 8px 0 color-mix(in oklab, var(--spike) 20%, transparent)" : "none",
-                  }}
+                  onClick={() => placePiece(piece)}
+                  className={classNames(
+                    "absolute z-10 transition-all duration-700 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                    placed ? piece.placedClassName : piece.restClassName,
+                  )}
+                  style={{ "--tw-ring-color": "var(--spike)" } as React.CSSProperties}
+                  aria-label={piece.ariaLabel}
                 >
-                  <div className="flex items-center justify-between">
-                    <MonoTag>{card.no}</MonoTag>
-                    <span className="text-xs uppercase tracking-[0.22em]" style={{ color: opened ? "var(--spike)" : "var(--ink-soft)" }}>
-                      {opened ? "opened" : "sealed"}
-                    </span>
-                  </div>
-                  <h3 className="mt-6 text-2xl" style={{ color: "var(--ink)" }}>{card.title}</h3>
-                  <p className="mt-4 text-sm leading-7" style={{ color: "var(--ink-soft)" }}>{card.prompt}</p>
-                  <div className="mt-8 flex aspect-square items-center justify-center rounded-full border" style={{ borderColor: opened ? "var(--spike)" : "color-mix(in oklab, var(--ink) 42%, transparent)", color: opened ? "var(--spike)" : "transparent" }}>
-                    <span className="text-4xl" style={{ fontFamily: "var(--font-display)", textShadow: opened ? "0 0 0 transparent" : "0 0 18px var(--ink)" }}>
-                      {opened ? card.clue : "?"}
-                    </span>
-                  </div>
-                  <p className="mt-6 text-xs leading-6" style={{ color: opened ? "var(--ink)" : "var(--ink-soft)" }}>
-                    {opened ? card.note : "轻触这页纸,让树影移开。"}
-                  </p>
+                  <SpecimenShape piece={piece} placed={placed} />
                 </button>
               );
             })}
           </div>
         </div>
-
-        <form onSubmit={submitAnswer} className="mt-12 border-[1.5px] p-6 md:p-8" style={{ borderColor: "var(--ink)", background: "color-mix(in oklab, var(--paper) 80%, white)" }}>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr_auto] md:items-end">
-            <label className="block">
-              <MonoTag>Final answer</MonoTag>
-              <input
-                value={answer}
-                onChange={(event) => setAnswer(event.target.value)}
-                placeholder="输入三枚印章连成的话"
-                className="mt-3 w-full border bg-transparent px-4 py-3 text-lg outline-none"
-                style={{ borderColor: "var(--ink)", color: "var(--ink)", fontFamily: "var(--font-display)" }}
-              />
-            </label>
-            <button type="submit" className="border px-6 py-3 font-bold transition hover:-translate-y-0.5" style={{ borderColor: "var(--ink)", background: "var(--ink)", color: "var(--paper)" }}>
-              打开留言板
-            </button>
-          </div>
-          {error && <p className="mt-4 text-sm" style={{ color: "var(--spike)" }}>{error}</p>}
-          {unlocked && <p className="mt-4 text-sm" style={{ color: "var(--ink-soft)" }}>果园门已打开。你可以继续往下留言。</p>}
-        </form>
       </section>
 
       <section id="guestbook" className="container pb-20 md:pb-28">
@@ -312,7 +402,7 @@ function SecretGrove() {
               <div className="flex min-h-[18rem] flex-col items-center justify-center border border-dashed p-8 text-center" style={{ borderColor: "color-mix(in oklab, var(--ink) 48%, transparent)" }}>
                 <MonoTag>Board locked</MonoTag>
                 <p className="mt-4 max-w-md leading-8" style={{ color: "var(--ink-soft)" }}>
-                  留言板还被树影挡着。回到上方,把三枚标本印章读成一句话后再来。
+                  留言板还在树影后面。等旧标本纸自己显出暗语,门缝就会变亮。
                 </p>
               </div>
             ) : (
