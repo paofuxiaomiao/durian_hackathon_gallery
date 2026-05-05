@@ -142,12 +142,44 @@ export default function FieldNotes() {
 /* ============== 复古拼贴墙 ============== */
 
 function CollageWall({ list }: { list: FieldNote[] }) {
-  // 用 css multi-column 实现 Pinterest 式错落墙,卡片本身做轻微旋转
+  // 不再使用 CSS multi-column：它会把绝对定位的胶带装饰在末尾单独分栏，造成“图片被藏起来”的错觉。
+  // 改为按断点手动分列，保留错落拼贴感，同时保证每张宝丽来卡片完整露出。
+  const splitIntoColumns = (count: number) => {
+    const columns: { note: FieldNote; index: number }[][] = Array.from({ length: count }, () => []);
+    list.forEach((note, index) => {
+      columns[index % count].push({ note, index });
+    });
+    return columns;
+  };
+
+  const oneColumn = splitIntoColumns(1);
+  const twoColumns = splitIntoColumns(2);
+  const threeColumns = splitIntoColumns(3);
+
+  const renderColumns = (
+    columns: { note: FieldNote; index: number }[][],
+    offsets: string[] = []
+  ) =>
+    columns.map((column, columnIndex) => (
+      <div
+        key={columnIndex}
+        className={`flex flex-col gap-8 md:gap-12 ${offsets[columnIndex] ?? ""}`}
+      >
+        {column.map(({ note, index }) => (
+          <FieldCard key={note.id} note={note} index={index} />
+        ))}
+      </div>
+    ));
+
   return (
-    <div className="[column-fill:_balance] columns-1 sm:columns-2 lg:columns-3 gap-6 md:gap-8">
-      {list.map((note, i) => (
-        <FieldCard key={note.id} note={note} index={i} />
-      ))}
+    <div className="relative pb-8 md:pb-12">
+      <div className="sm:hidden flex flex-col gap-8">{renderColumns(oneColumn)}</div>
+      <div className="hidden sm:grid lg:hidden grid-cols-2 gap-x-6 gap-y-10 items-start">
+        {renderColumns(twoColumns, ["pt-0", "pt-12"])}
+      </div>
+      <div className="hidden lg:grid grid-cols-3 gap-x-8 xl:gap-x-10 gap-y-12 items-start">
+        {renderColumns(threeColumns, ["pt-0", "pt-16", "pt-6"])}
+      </div>
     </div>
   );
 }
@@ -161,11 +193,11 @@ function FieldCard({ note, index }: { note: FieldNote; index: number }) {
 
   return (
     <article
-      className="break-inside-avoid mb-8 md:mb-12 group"
-      style={{ transform: `rotate(${note.rotate}deg)` }}
+      className="group relative z-0 hover:z-10"
+      style={{ transform: `rotate(${note.rotate}deg)`, transformOrigin: "center top" }}
     >
       <div
-        className="relative bg-white p-3 md:p-4 pb-14 md:pb-16 transition duration-500 group-hover:!rotate-0 group-hover:scale-[1.02]"
+        className="relative bg-white p-3 md:p-4 pb-14 md:pb-16 transition duration-500 group-hover:scale-[1.015]"
         style={{
           boxShadow:
             "0 1px 0 rgba(0,0,0,0.04), 0 18px 36px -18px rgba(35, 71, 59, 0.45), 0 6px 14px -6px rgba(0,0,0,0.18)",
