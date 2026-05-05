@@ -27,7 +27,7 @@ export const projects: Project[] = [
     id: "durian-camera",
     issueNo: "NO.01",
     teamName: "中南大学队",
-    projectTitle: "合成相机 合成猫山王",
+    projectTitle: "榴莲相机 合成猫山王",
     tagline: "一个队伍两个作品：本地 AI 选榴莲 + 合成猫山王小游戏",
     leader: "类桐",
     members: "类桐、扶瑤琪",
