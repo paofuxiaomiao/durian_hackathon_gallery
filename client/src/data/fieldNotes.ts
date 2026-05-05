@@ -1,3 +1,5 @@
+import { assetUrl } from "@/lib/assetUrl";
+
 /**
  * Field Notes · 现场片段
  *
@@ -24,7 +26,7 @@ export interface FieldNote {
 export const fieldNotes: FieldNote[] = [
   {
     id: 1,
-    src: `/manus-storage/field-01-stage-banner_93b57d98.png`,
+    src: assetUrl(`/manus-storage/field-01-stage-banner_93b57d98.png`),
     kind: `ai-mascot`,
     section: `开幕 · OPENING`,
     dateLabel: `MAY 01`,
@@ -37,7 +39,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 2,
-    src: `/manus-storage/field-02-stage-group_93568447.png`,
+    src: assetUrl(`/manus-storage/field-02-stage-group_93568447.png`),
     kind: `ai-mascot`,
     section: `开幕 · OPENING`,
     dateLabel: `MAY 01`,
@@ -49,7 +51,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 3,
-    src: `/manus-storage/field-03-elephant-square_b9f11fc6.png`,
+    src: assetUrl(`/manus-storage/field-03-elephant-square_b9f11fc6.png`),
     kind: `ai-mascot`,
     section: `广场 · PLAZA`,
     dateLabel: `MAY 02`,
@@ -62,7 +64,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 4,
-    src: `/manus-storage/field-04-arch-duel_1e738658.png`,
+    src: assetUrl(`/manus-storage/field-04-arch-duel_1e738658.png`),
     kind: `ai-mascot`,
     section: `门口 · ENTRANCE`,
     dateLabel: `MAY 02`,
@@ -74,7 +76,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 5,
-    src: `/manus-storage/field-05-yellow-wall-shark_ebcca516.png`,
+    src: assetUrl(`/manus-storage/field-05-yellow-wall-shark_ebcca516.png`),
     kind: `live`,
     section: `外景 · STREET`,
     dateLabel: `MAY 02`,
@@ -86,7 +88,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 6,
-    src: `/manus-storage/field-06-stage-talk_f1ac19b7.png`,
+    src: assetUrl(`/manus-storage/field-06-stage-talk_f1ac19b7.png`),
     kind: `ai-mascot`,
     section: `舞台 · STAGE`,
     dateLabel: `MAY 03`,
@@ -99,7 +101,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 7,
-    src: `/manus-storage/field-07-girl-meets-durian_e5f01762.png`,
+    src: assetUrl(`/manus-storage/field-07-girl-meets-durian_e5f01762.png`),
     kind: `ai-mascot`,
     section: `市集 · MARKET`,
     dateLabel: `MAY 03`,
@@ -111,7 +113,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 8,
-    src: `/manus-storage/field-08-fortune-photobooth_842f8655.png`,
+    src: assetUrl(`/manus-storage/field-08-fortune-photobooth_842f8655.png`),
     kind: `ai-mascot`,
     section: `拍照点 · BOOTH`,
     dateLabel: `MAY 03`,
@@ -124,7 +126,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 9,
-    src: `/manus-storage/field-09-livingroom-cat_6da129a1.png`,
+    src: assetUrl(`/manus-storage/field-09-livingroom-cat_6da129a1.png`),
     kind: `ai-mascot`,
     section: `茶歇 · LOUNGE`,
     dateLabel: `MAY 03`,
@@ -136,7 +138,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 10,
-    src: `/manus-storage/field-10-rooftop-sunny_78ebef1e.png`,
+    src: assetUrl(`/manus-storage/field-10-rooftop-sunny_78ebef1e.png`),
     kind: `ai-mascot`,
     section: `露台 · ROOFTOP`,
     dateLabel: `MAY 03`,
@@ -148,7 +150,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 11,
-    src: `/manus-storage/field-11-rooftop-coffee_1339c35c.png`,
+    src: assetUrl(`/manus-storage/field-11-rooftop-coffee_1339c35c.png`),
     kind: `ai-mascot`,
     section: `茶歇 · LOUNGE`,
     dateLabel: `MAY 04`,
@@ -161,7 +163,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 12,
-    src: `/manus-storage/field-12-tea-time_eb64a9b8.png`,
+    src: assetUrl(`/manus-storage/field-12-tea-time_eb64a9b8.png`),
     kind: `ai-mascot`,
     section: `茶歇 · LOUNGE`,
     dateLabel: `MAY 04`,
@@ -173,7 +175,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 13,
-    src: `/manus-storage/field-13-real-elephant-pose_f9c15faa.webp`,
+    src: assetUrl(`/manus-storage/field-13-real-elephant-pose_f9c15faa.webp`),
     kind: `live`,
     section: `真实现场 · IRL`,
     dateLabel: `MAY 02`,
@@ -185,7 +187,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 14,
-    src: `/manus-storage/field-14-durian-cracked-open_f4dd5e0b.webp`,
+    src: assetUrl(`/manus-storage/field-14-durian-cracked-open_f4dd5e0b.webp`),
     kind: `live`,
     section: `真实现场 · IRL`,
     dateLabel: `MAY 02`,
@@ -198,7 +200,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 15,
-    src: `/manus-storage/field-15-vision-pro-demo_602f30bc.webp`,
+    src: assetUrl(`/manus-storage/field-15-vision-pro-demo_602f30bc.webp`),
     kind: `live`,
     section: `真实现场 · IRL`,
     dateLabel: `MAY 03`,
@@ -210,7 +212,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 16,
-    src: `/manus-storage/field-16-banner-real_e1c2b92f.webp`,
+    src: assetUrl(`/manus-storage/field-16-banner-real_e1c2b92f.webp`),
     kind: `live`,
     section: `真实现场 · IRL`,
     dateLabel: `MAY 04`,
@@ -222,7 +224,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 17,
-    src: `/manus-storage/field-17-bbq-party_a1b2c3d4.png`,
+    src: assetUrl(`/manus-storage/field-17-bbq-party_a1b2c3d4.png`),
     kind: `ai-mascot`,
     section: `聚餐 · FEAST`,
     dateLabel: `MAY 04`,
@@ -235,7 +237,7 @@ export const fieldNotes: FieldNote[] = [
   },
   {
     id: 18,
-    src: `/manus-storage/field-18-hotpot-feast_e5f6g7h8.png`,
+    src: assetUrl(`/manus-storage/field-18-hotpot-feast_e5f6g7h8.png`),
     kind: `ai-mascot`,
     section: `聚餐 · FEAST`,
     dateLabel: `MAY 04`,
