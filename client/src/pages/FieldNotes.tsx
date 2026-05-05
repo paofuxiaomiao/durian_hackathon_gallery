@@ -50,7 +50,7 @@ export default function FieldNotes() {
               className="mt-6 text-[3rem] md:text-[5.6rem] leading-[0.95] tracking-tight"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 800 }}
             >
-              当 16 帧 <em style={{ color: "var(--spike)", fontStyle: "italic" }}>带刺的</em>
+              当 18 帧 <em style={{ color: "var(--spike)", fontStyle: "italic" }}>带刺的</em>
               <br />
               春天,被钉进杂志内页。
             </h1>
@@ -272,7 +272,7 @@ function FieldCard({ note, index }: { note: FieldNote; index: number }) {
             style={{ color: "var(--ink-soft)" }}
           >
             <span className="text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-              # {String(note.id).padStart(2, "0")} / 16
+              # {String(note.id).padStart(2, "0")} / {fieldNotes.length}
             </span>
             <span
               className="text-xs"

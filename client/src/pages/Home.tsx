@@ -20,8 +20,10 @@ import {
 
 export default function Home() {
   const featured = projects[0];
-  const otherFeatured = projects.slice(1, 4);
-  const remaining = projects.slice(4);
+  // 三组精选：NO.03 赵巍老师战队、NO.04 榴莲大王、NO.09 王先森爱榴莲
+  const otherFeatured = [projects[2], projects[3], projects[8]];
+  // 从 index=4 开始，排除已进入精选的 NO.09
+  const remaining = projects.slice(4).filter((p) => p.id !== projects[8].id);
 
   return (
     <PageLayout>

@@ -176,7 +176,9 @@ export const projects: Project[] = [
     affiliation: "湖南工商大学",
     completionDate: "2026-05-04",
     tools: ["GPT/Gemini/豆包/DeepSeek 等 LLM", "Codex"],
-    projectUrls: [],
+    projectUrls: [
+      { label: "在线体验", href: "https://liulian.mizhou.xyz/" },
+    ],
     description:
       "本项目基于大模型能力,构建一个『AI 榴莲选购助手』,帮助用户根据榴莲的外观特征(颜色、裂口、形状、重量等)进行智能判断与推荐。用户可通过上传图片或输入描述,系统自动分析榴莲成熟度、甜度和品质,并给出选购建议。同时结合简单科普与交互问答,降低新手选购门槛,提升购买体验与决策效率。",
     vibeCoding:
