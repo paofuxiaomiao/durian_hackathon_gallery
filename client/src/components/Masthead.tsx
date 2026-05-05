@@ -116,6 +116,7 @@ export function Footer() {
               <li><Link href="/voices" className="hover:opacity-70">参赛感想 Voices</Link></li>
               <li><Link href="/field-notes" className="hover:opacity-70">现场片段 Field Notes</Link></li>
               <li><Link href="/about" className="hover:opacity-70">关于本刊 About</Link></li>
+              <li><Link href="/secret-grove" className="hover:opacity-70">隐藏果园 Secret Grove</Link></li>
             </ul>
           </div>
           <div>
@@ -131,7 +132,7 @@ export function Footer() {
         <RuleLine className="mt-10" />
         <div className="mt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mono-tag">
           <span>© 2026 AI DURIAN HACKATHON · ALL RIGHTS RESERVED</span>
-          <span>NO.01 / TROPICAL EDITORIAL</span>
+          <Link href="/secret-grove" className="hover:opacity-70">NO.404 / SECRET GROVE</Link>
         </div>
       </div>
     </footer>
