@@ -110,9 +110,11 @@ export default function Home() {
               <div
                 className="absolute -top-4 -left-4 z-20 pointer-events-none hidden md:flex items-center justify-center w-28 h-28 rounded-full text-center"
                 style={{
-                  background: "var(--paper)",
-                  border: "1.5px solid var(--spike)",
-                  color: "var(--spike)",
+                  background: "color-mix(in oklab, var(--paper) 54%, transparent)",
+                  border: "1.5px solid color-mix(in oklab, var(--spike) 68%, transparent)",
+                  color: "color-mix(in oklab, var(--spike) 74%, transparent)",
+                  opacity: 0.82,
+                  backdropFilter: "blur(0.2px)",
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.62rem",
                   letterSpacing: "0.22em",
