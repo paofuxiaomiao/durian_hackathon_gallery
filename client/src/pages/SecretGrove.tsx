@@ -22,7 +22,10 @@ type SpecimenObject = {
 };
 
 const UNLOCK_KEY = "durian.secretGrove.unlocked";
-const MESSAGES_KEY = "durian.secretGrove.messages";
+const LOCAL_MESSAGES_KEY = "durian.secretGrove.messages";
+const GUESTBOOK_API_URL = (import.meta.env.VITE_SECRET_GROVE_API_URL || "").trim().replace(/\/+$/, "");
+
+type GuestbookStatus = "local" | "loading" | "cloud" | "offline";
 
 const specimenObjects: SpecimenObject[] = [
   {
@@ -61,7 +64,7 @@ const initialMessages: GroveMessage[] = [
   {
     id: "seed-message-1",
     name: "榴莲编辑部",
-    body: "欢迎来到隐藏果园。这里的留言会先保存在你当前浏览器里,像夹在纸刊里的便签。",
+    body: "欢迎来到隐藏果园。云端 API 配好后,这里的留言会挂在同一棵树上;未配置前会先留在当前浏览器里。",
     createdAt: "2026-05-06T00:00:00.000Z",
   },
   {
@@ -79,17 +82,38 @@ function createId() {
   return `grove-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function readMessages(): GroveMessage[] {
+function normalizeMessages(value: unknown): GroveMessage[] {
+  if (!Array.isArray(value)) return initialMessages;
+  const safeMessages = value
+    .filter((item): item is Partial<GroveMessage> => Boolean(item) && typeof item === "object")
+    .map((item) => ({
+      id: String(item.id || createId()).slice(0, 80),
+      name: String(item.name || "匿名榴莲").trim().slice(0, 20) || "匿名榴莲",
+      body: String(item.body || "").trim().slice(0, 180),
+      createdAt: String(item.createdAt || new Date().toISOString()),
+    }))
+    .filter((item) => item.body);
+  return safeMessages.length ? safeMessages.slice(0, 80) : initialMessages;
+}
+
+function readLocalMessages(): GroveMessage[] {
   if (typeof window === "undefined") return initialMessages;
   try {
-    const raw = window.localStorage.getItem(MESSAGES_KEY);
+    const raw = window.localStorage.getItem(LOCAL_MESSAGES_KEY);
     if (!raw) return initialMessages;
-    const parsed = JSON.parse(raw) as GroveMessage[];
-    if (!Array.isArray(parsed)) return initialMessages;
-    return parsed.filter((item) => item && typeof item.name === "string" && typeof item.body === "string");
+    return normalizeMessages(JSON.parse(raw));
   } catch {
     return initialMessages;
   }
+}
+
+function cacheLocalMessages(messages: GroveMessage[]) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(LOCAL_MESSAGES_KEY, JSON.stringify(messages));
+}
+
+function getGuestbookApiUrl() {
+  return GUESTBOOK_API_URL;
 }
 
 function formatTime(value: string) {
@@ -168,17 +192,57 @@ function SecretGrove() {
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
   const [posted, setPosted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [guestbookStatus, setGuestbookStatus] = useState<GuestbookStatus>(GUESTBOOK_API_URL ? "loading" : "local");
+  const [guestbookNotice, setGuestbookNotice] = useState(GUESTBOOK_API_URL ? "正在连接云端留言板。" : "尚未配置云端 API,留言会暂存本机。");
   const [lastWhisper, setLastWhisper] = useState("纸页很安静。几件东西散在边上。");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     setUnlocked(window.localStorage.getItem(UNLOCK_KEY) === "true");
-    setMessages(readMessages());
+    const cachedMessages = readLocalMessages();
+    setMessages(cachedMessages);
+
+    const apiUrl = getGuestbookApiUrl();
+    if (!apiUrl) {
+      setGuestbookStatus("local");
+      setGuestbookNotice("尚未配置云端 API,留言会暂存本机。");
+      return;
+    }
+
+    let active = true;
+    setGuestbookStatus("loading");
+    setGuestbookNotice("正在从阿里云函数计算读取共享便签。");
+
+    fetch(apiUrl, { method: "GET", headers: { Accept: "application/json" } })
+      .then(async (response) => {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || payload.ok === false) {
+          throw new Error(payload.error || "云端留言读取失败。");
+        }
+        return normalizeMessages(payload.messages);
+      })
+      .then((cloudMessages) => {
+        if (!active) return;
+        setMessages(cloudMessages);
+        cacheLocalMessages(cloudMessages);
+        setGuestbookStatus("cloud");
+        setGuestbookNotice("已连接云端留言板,所有访客会看到同一组便签。");
+      })
+      .catch(() => {
+        if (!active) return;
+        setGuestbookStatus("offline");
+        setGuestbookNotice("暂时连不上云端留言板,正在显示本机缓存。");
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
+    cacheLocalMessages(messages);
   }, [messages]);
 
   const allPlaced = placedPieces.length === specimenObjects.length;
@@ -203,27 +267,58 @@ function SecretGrove() {
     }, 80);
   }
 
-  function submitMessage(event: React.FormEvent<HTMLFormElement>) {
+  async function submitMessage(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const safeName = name.trim().slice(0, 20) || "匿名榴莲";
     const safeBody = body.trim().slice(0, 180);
-    if (!safeBody) return;
-    const next: GroveMessage = {
-      id: createId(),
-      name: safeName,
-      body: safeBody,
-      createdAt: new Date().toISOString(),
-    };
-    setMessages((current) => [next, ...current].slice(0, 24));
-    setBody("");
-    setPosted(true);
-    window.setTimeout(() => setPosted(false), 1600);
+    if (!safeBody || submitting) return;
+
+    const apiUrl = getGuestbookApiUrl();
+    setSubmitting(true);
+
+    try {
+      if (!apiUrl) throw new Error("未配置云端 API。");
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: safeName, body: safeBody }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.ok === false) {
+        throw new Error(payload.error || "云端留言保存失败。");
+      }
+      const nextMessages = normalizeMessages(payload.messages || (payload.message ? [payload.message, ...messages] : messages));
+      setMessages(nextMessages);
+      cacheLocalMessages(nextMessages);
+      setGuestbookStatus("cloud");
+      setGuestbookNotice("留言已写进云端果园,所有访客刷新后都能看见。");
+    } catch {
+      const next: GroveMessage = {
+        id: createId(),
+        name: safeName,
+        body: safeBody,
+        createdAt: new Date().toISOString(),
+      };
+      const nextMessages = [next, ...messages].slice(0, 80);
+      setMessages(nextMessages);
+      cacheLocalMessages(nextMessages);
+      setGuestbookStatus(apiUrl ? "offline" : "local");
+      setGuestbookNotice(apiUrl ? "云端暂时不可用,这条留言已先保存在本机缓存。" : "这条留言已保存在本机缓存。配置云端 API 后即可共享给所有访客。");
+    } finally {
+      setBody("");
+      setPosted(true);
+      setSubmitting(false);
+      window.setTimeout(() => setPosted(false), 1800);
+    }
   }
 
   function resetLocalMessages() {
     setMessages(initialMessages);
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(MESSAGES_KEY, JSON.stringify(initialMessages));
+    cacheLocalMessages(initialMessages);
+    if (guestbookStatus === "cloud") {
+      setGuestbookNotice("已重置本机缓存。云端留言不会被这个按钮删除,刷新后会重新读取云端数据。");
+    } else {
+      setGuestbookNotice("已重置本机留言缓存。");
     }
   }
 
@@ -393,8 +488,11 @@ function SecretGrove() {
           <div>
             <SectionLabel kicker="Unlocked board" title="自由留言板" />
             <p className="mt-5 leading-8" style={{ color: "var(--ink-soft)" }}>
-              解开隐藏果园后,这块板会记录你写下的便签。当前网站部署在 GitHub Pages 静态空间,所以留言先保存在当前浏览器本地;如果下一步要做成所有访客共享的公共留言墙,可以再接入云端数据库或评论服务。
+              解开隐藏果园后,这块板会记录你写下的便签。它现在优先连接阿里云函数计算留言 API,把便签写入云端对象存储;如果云端地址还没配置,或短暂不可用,就自动退回本机缓存,不打断果园体验。
             </p>
+            <div className="mt-5 inline-flex items-center gap-3 border px-4 py-2 text-xs font-bold uppercase tracking-[0.24em]" style={{ borderColor: "var(--ink)", color: "var(--ink)" }}>
+              {guestbookStatus === "cloud" ? "Cloud board" : guestbookStatus === "loading" ? "Connecting" : guestbookStatus === "offline" ? "Offline cache" : "Local cache"}
+            </div>
           </div>
 
           <div className="border-[1.5px] p-5 md:p-7" style={{ borderColor: "var(--ink)", background: "color-mix(in oklab, var(--paper-deep) 58%, transparent)" }}>
@@ -407,6 +505,9 @@ function SecretGrove() {
               </div>
             ) : (
               <div>
+                <p className="mb-4 border px-4 py-3 text-sm leading-7" style={{ borderColor: "color-mix(in oklab, var(--ink) 32%, transparent)", color: "var(--ink-soft)", background: "color-mix(in oklab, var(--paper) 72%, white)" }}>
+                  {guestbookNotice}
+                </p>
                 <form onSubmit={submitMessage} className="grid grid-cols-1 gap-4">
                   <input
                     value={name}
@@ -429,10 +530,10 @@ function SecretGrove() {
                     <span className="text-xs" style={{ color: "var(--ink-soft)" }}>{body.length}/180</span>
                     <div className="flex gap-3">
                       <button type="button" onClick={resetLocalMessages} className="border px-4 py-2 text-sm transition hover:-translate-y-0.5" style={{ borderColor: "var(--ink)", color: "var(--ink)" }}>
-                        重置本机留言
+                        重置本机缓存
                       </button>
-                      <button type="submit" className="border px-5 py-2 text-sm font-bold transition hover:-translate-y-0.5" style={{ borderColor: "var(--ink)", background: "var(--spike)", color: "var(--paper)" }}>
-                        贴上便签
+                      <button type="submit" disabled={submitting} className="border px-5 py-2 text-sm font-bold transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60" style={{ borderColor: "var(--ink)", background: "var(--spike)", color: "var(--paper)" }}>
+                        {submitting ? "正在保存" : "贴上便签"}
                       </button>
                     </div>
                   </div>

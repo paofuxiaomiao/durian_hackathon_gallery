@@ -1,0 +1,14 @@
+{
+  "name": "durian-secret-grove-guestbook-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Alibaba Cloud Function Compute HTTP API for the Durian Hackathon Gallery secret grove guestbook.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "zip": "npm install --omit=dev && zip -r guestbook-api.zip index.js package.json package-lock.json node_modules"
+  },
+  "dependencies": {
+    "ali-oss": "^6.23.0"
+  }
+}
