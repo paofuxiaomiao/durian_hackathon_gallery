@@ -107,12 +107,12 @@ export default function FieldNotes() {
       <FieldQuotesMarquee className="mt-10" />
 
       {/* ---------------- Collage Wall ---------------- */}
-      <section className="container mt-12 md:mt-16">
+      <section className="container relative z-10 mt-12 md:mt-16 mb-16 md:mb-24 overflow-visible">
         <CollageWall list={list} key={filter} />
       </section>
 
       {/* ---------------- Closing Quote ---------------- */}
-      <section className="container mt-20 md:mt-28">
+      <section className="container relative z-0 mt-20 md:mt-28">
         <div
           className="relative px-6 md:px-12 py-12 md:py-16"
           style={{
@@ -172,7 +172,7 @@ function CollageWall({ list }: { list: FieldNote[] }) {
     ));
 
   return (
-    <div className="relative pb-8 md:pb-12">
+    <div className="relative overflow-visible pb-16 md:pb-24">
       <div className="sm:hidden flex flex-col gap-8">{renderColumns(oneColumn)}</div>
       <div className="hidden sm:grid lg:hidden grid-cols-2 gap-x-6 gap-y-10 items-start">
         {renderColumns(twoColumns, ["pt-0", "pt-12"])}
@@ -190,10 +190,12 @@ function FieldCard({ note, index }: { note: FieldNote; index: number }) {
   const tape = (index + (isLive ? 1 : 0)) % 3; // 三种胶带颜色轮换
   const tapeColor =
     tape === 0 ? "rgba(214, 161, 53, 0.65)" : tape === 1 ? "rgba(199, 78, 60, 0.55)" : "rgba(35, 71, 59, 0.45)";
+  const fileExt = note.src.split("?")[0]?.split(".").pop() || "png";
+  const downloadFileName = `durian-field-note-${String(note.id).padStart(2, "0")}.${fileExt}`;
 
   return (
     <article
-      className="group relative z-0 hover:z-10"
+      className="group relative z-0 mb-4 md:mb-8 hover:z-10"
       style={{ transform: `rotate(${note.rotate}deg)`, transformOrigin: "center top" }}
     >
       <div
@@ -228,20 +230,42 @@ function FieldCard({ note, index }: { note: FieldNote; index: number }) {
           </div>
         )}
 
-        {/* 图片 */}
-        <div className="relative overflow-hidden" style={{ background: "#0d1814" }}>
+        {/* 图片：整张照片可点击下载，保留胶片 / 印章式信息层 */}
+        <a
+          href={note.src}
+          download={downloadFileName}
+          aria-label={`下载活动照片：${note.title}`}
+          title="点击下载活动照片"
+          className="relative block overflow-hidden cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--spike)] focus-visible:ring-offset-4 focus-visible:ring-offset-white"
+          style={{ background: "#0d1814" }}
+        >
           <img
             src={note.src}
             alt={note.title}
             loading="lazy"
-            className="block w-full h-auto"
+            className="block w-full h-auto transition duration-500 group-hover:scale-[1.025]"
             style={{
               filter: isLive ? "saturate(0.95) contrast(1.04)" : "saturate(1.02) contrast(1.02)",
             }}
           />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
+            style={{ background: "linear-gradient(180deg, rgba(13,24,20,0) 45%, rgba(13,24,20,0.58) 100%)" }}
+          />
+          <span
+            className="pointer-events-none absolute bottom-3 left-3 mono-tag px-2 py-1 opacity-0 translate-y-1 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0"
+            style={{
+              background: "rgba(245,239,224,0.94)",
+              color: "var(--ink)",
+              border: "1px solid rgba(35,71,59,0.45)",
+            }}
+          >
+            CLICK TO DOWNLOAD
+          </span>
           {/* 红印章式 ROLL 标 */}
           <span
-            className="absolute top-2 left-2 mono-tag px-2 py-0.5"
+            className="pointer-events-none absolute top-2 left-2 mono-tag px-2 py-0.5"
             style={{
               background: "rgba(245,239,224,0.92)",
               color: "var(--spike)",
@@ -253,7 +277,7 @@ function FieldCard({ note, index }: { note: FieldNote; index: number }) {
           </span>
           {/* 日期戳 */}
           <span
-            className="absolute bottom-2 right-2 mono-tag px-2 py-0.5"
+            className="pointer-events-none absolute bottom-2 right-2 mono-tag px-2 py-0.5"
             style={{
               background: "rgba(245,239,224,0.85)",
               color: "var(--ink)",
@@ -263,7 +287,7 @@ function FieldCard({ note, index }: { note: FieldNote; index: number }) {
           >
             {note.dateLabel}
           </span>
-        </div>
+        </a>
 
         {/* 文案 */}
         <div className="mt-4 px-1">
