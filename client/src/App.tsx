@@ -13,6 +13,7 @@ import Voices from "./pages/Voices";
 import About from "./pages/About";
 import FieldNotes from "./pages/FieldNotes";
 import SecretGrove from "./pages/SecretGrove";
+import MapPage from "./pages/Map";
 
 declare const __APP_BASE__: string;
 const BASE = __APP_BASE__;
@@ -34,6 +35,7 @@ function AppRoutes() {
       <Route path="/voices" component={Voices} />
       <Route path="/field-notes" component={FieldNotes} />
       <Route path="/secret-grove" component={SecretGrove} />
+      <Route path="/map" component={MapPage} />
       <Route path="/about" component={About} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

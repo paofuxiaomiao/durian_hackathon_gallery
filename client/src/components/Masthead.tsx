@@ -13,6 +13,7 @@ export function Masthead() {
     { href: "/projects", label: "目录 Index" },
     { href: "/voices", label: "感想 Voices" },
     { href: "/field-notes", label: "现场 Field Notes" },
+    { href: "/map", label: "地图 Map" },
     { href: "/about", label: "刊首 About" },
   ];
 
@@ -115,6 +116,7 @@ export function Footer() {
               <li><Link href="/projects" className="hover:opacity-70">作品目录 Index</Link></li>
               <li><Link href="/voices" className="hover:opacity-70">参赛感想 Voices</Link></li>
               <li><Link href="/field-notes" className="hover:opacity-70">现场片段 Field Notes</Link></li>
+              <li><Link href="/map" className="hover:opacity-70">赛事地图 Map</Link></li>
               <li><Link href="/about" className="hover:opacity-70">关于本刊 About</Link></li>
               <li><Link href="/secret-grove" className="hover:opacity-70">隐藏果园 Secret Grove</Link></li>
             </ul>
