@@ -21,7 +21,7 @@ const VENUE = {
   desc: "2026 创想AI全球黑客松 · 榴莲特别号 主会场",
 };
 
-const TDT_KEY = "8af5319e0381df93e15f5ca040a795a4";
+const TDT_KEY = "9350e8dd4a1aee677bf574408f087524";
 const TDT_SCRIPT = `https://api.tianditu.gov.cn/api?v=4.0&tk=${TDT_KEY}`;
 
 // ── 动态加载天地图 JS API ────────────────────────────────
